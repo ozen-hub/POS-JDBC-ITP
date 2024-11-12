@@ -32,7 +32,7 @@ public class CustomerFormController {
             // create the query
             String sql="INSERT INTO customer" +
                     " VALUES('"+id+"','"+name+"','"
-                    +address+"','"+salary+")";
+                    +address+"','"+salary+"')";
             // create the statement
             Statement statement =
                     con.createStatement();

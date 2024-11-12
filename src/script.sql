@@ -8,3 +8,9 @@ CREATE TABLE IF NOT EXISTS customer(
     address VARCHAR(45) NOT NULL,
     salary DOUBLE
 );
+
+CREATE TABLE IF NOT EXISTS user(
+                                   username VARCHAR(45) PRIMARY KEY ,
+    password VARCHAR(45) NOT NULL
+    );
+INSERT INTO user VALUES ('admin','1234');

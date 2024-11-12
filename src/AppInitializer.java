@@ -13,7 +13,7 @@ public class AppInitializer extends Application {
         primaryStage.setScene(
                 new Scene(
                         FXMLLoader.load(
-                                getClass().getResource("com/data/CustomerForm.fxml")
+                                getClass().getResource("CustomerForm.fxml")
                         )
                 )
         );
