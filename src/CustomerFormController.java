@@ -2,10 +2,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CustomerFormController {
 
@@ -30,13 +27,11 @@ public class CustomerFormController {
                     "root","1234"
             );
             // create the query
-            String sql="INSERT INTO customer" +
-                    " VALUES('"+id+"','"+name+"','"
-                    +address+"','"+salary+"')";
+            String sql="INSERT INTO customer VALUES(?,?,?,?)";
             // create the statement
-            Statement statement =
-                    con.createStatement();
-            int isSaved = statement.executeUpdate(sql);
+            PreparedStatement statement =
+                    con.prepareStatement(sql);
+            int isSaved = statement.executeUpdate();
             if(isSaved>0){
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Saved").show();
@@ -48,5 +43,24 @@ public class CustomerFormController {
             e.printStackTrace();
         }
 
+    }
+
+    public void getCustomerOnAction(ActionEvent actionEvent) {
+        int customerId=
+                Integer.parseInt(txtId.getText());
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc","root","1234");
+            String sql ="SELECT * FROM customer WHERE id=?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            ResultSet set = stm.executeQuery();
+            if(set.next()){
+                System.out.println(set);
+            }else{
+                System.out.println("not found");
+            }
+        }catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
+        }
     }
 }
