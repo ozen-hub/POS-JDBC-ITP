@@ -6,24 +6,12 @@ import java.util.List;
 
 public class DatabaseCode {
     public boolean save(Customer c) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO customer VALUES(?,?,?,?)";
-        PreparedStatement statement =
-                DbConnection.getInstance().
-                        getConnection().
-                        prepareStatement(sql);
-        statement.setInt(1, c.getId());
-        statement.setString(2, c.getName());
-        statement.setString(3, c.getAddress());
-        statement.setDouble(4, c.getSalary());
-        return statement.executeUpdate() > 0;
+        return CrudUtil.executeUpdate("INSERT INTO customer VALUES(?,?,?,?)",
+                c.getId(),c.getName(),c.getAddress(),c.getSalary());
     }
 
     public Customer find(int id) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM customer WHERE id=?";
-        PreparedStatement stm = DbConnection.getInstance().
-                getConnection().prepareStatement(sql);
-        stm.setInt(1, id);
-        ResultSet set = stm.executeQuery();
+        ResultSet set = CrudUtil.executeQuery("SELECT * FROM customer WHERE id=?",id);
         if (set.next()) {
             return new Customer(set.getInt(1),
                     set.getString(2),
@@ -34,30 +22,18 @@ public class DatabaseCode {
     }
 
     public boolean update(Customer c) throws SQLException, ClassNotFoundException {
-        String sql ="UPDATE customer" +
-                " SET name=?, address=?, salary=? WHERE id=?";
-        PreparedStatement stm = DbConnection.getInstance().
-                getConnection().prepareStatement(sql);
-        stm.setString(1,c.getName());
-        stm.setString(2,c.getAddress());
-        stm.setDouble(3,c.getSalary());
-        stm.setInt(4,c.getId());
-        return stm.executeUpdate()>0;
+        return CrudUtil.executeUpdate(
+                "UPDATE customer SET name=?, address=?, salary=? WHERE id=?",
+                c.getName(),c.getAddress(),c.getSalary(),c.getId()
+        );
     }
 
     public boolean delete(int id) throws SQLException, ClassNotFoundException {
-        String sql ="DELETE FROM customer WHERE id=?";
-        PreparedStatement stm = DbConnection.getInstance().
-                getConnection().prepareStatement(sql);
-        stm.setInt(1,id);
-        return stm.executeUpdate()>0;
+        return CrudUtil.executeUpdate("DELETE FROM customer WHERE id=?",id);
     }
 
     public List<Customer> findAll() throws SQLException, ClassNotFoundException {
-        String sql="SELECT * FROM customer";
-        PreparedStatement statement =DbConnection.getInstance()
-                        .getConnection().prepareStatement(sql);
-        ResultSet resultSet = statement.executeQuery();
+        ResultSet resultSet = CrudUtil.executeQuery("SELECT * FROM customer");
         List<Customer> list = new ArrayList<>();
         while (resultSet.next()){
             list.add(new Customer(resultSet.getInt(1),
