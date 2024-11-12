@@ -77,4 +77,34 @@ public class CustomerFormController {
                     e.getMessage()).show();
         }
     }
+
+    public void updateOnAction(ActionEvent actionEvent) {
+        int id=Integer.parseInt(txtId.getText());
+        String name = txtName.getText();
+        String address = txtAddress.getText();
+        double salary =
+                Double.parseDouble(txtSalary.getText());
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc","root","1234");
+            String sql ="UPDATE customer" +
+                    " SET name=?, address=?, salary=? WHERE id=?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setString(1,name);
+            stm.setString(2,address);
+            stm.setDouble(3,salary);
+            stm.setInt(4,id);
+            int isSaved = stm.executeUpdate();
+            if(isSaved>0){
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Customer Updated").show();
+            }else{
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Try again").show();
+            }
+        }catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR,
+                    e.getMessage()).show();
+        }
+    }
 }
