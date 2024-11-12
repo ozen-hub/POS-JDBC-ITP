@@ -1,5 +1,9 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import java.sql.*;
@@ -10,6 +14,40 @@ public class CustomerFormController {
     public TextField txtName;
     public TextField txtAddress;
     public TextField txtSalary;
+    public TableView<CustomerTM> tblCustomers;
+    public TableColumn colId;
+    public TableColumn colName;
+    public TableColumn colAddress;
+    public TableColumn colSalary;
+
+    public void initialize(){
+        loadAllData();
+    }
+
+    private void loadAllData() {
+        ObservableList<CustomerTM> tmList =
+                FXCollections.observableArrayList();
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc", "root","1234");
+            String sql="SELECT * FROM customer";
+            PreparedStatement statement =
+                    con.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                tmList.add(
+                new CustomerTM(resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDouble(4))
+                );
+            }
+            tblCustomers.setItems(tmList);
+        }catch (ClassNotFoundException | SQLException e){
+            new Alert(Alert.AlertType.ERROR,
+                    e.getMessage()).show();
+        }
+    }
 
     public void saveOnAction(ActionEvent actionEvent) {
         int id=Integer.parseInt(txtId.getText());
