@@ -83,11 +83,12 @@ public class CustomerFormController {
         int customerId=
                 Integer.parseInt(txtId.getText());
         try{
-
-            if(set.next()){
-                txtName.setText(set.getString(2));
-                txtAddress.setText(set.getString(3));
-                txtSalary.setText(String.valueOf(set.getDouble(4)));
+            Customer selectedCustomer =
+                    new DatabaseCode().find(customerId);
+            if(null!=selectedCustomer){
+                txtName.setText(selectedCustomer.getName());
+                txtAddress.setText(selectedCustomer.getAddress());
+                txtSalary.setText(String.valueOf(selectedCustomer.getSalary()));
             }else{
                new Alert(Alert.AlertType.WARNING,"Customer Not Found").show();
 
