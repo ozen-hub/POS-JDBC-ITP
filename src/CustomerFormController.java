@@ -39,6 +39,7 @@ public class CustomerFormController {
             if(isSaved>0){
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Saved").show();
+                clear();
             }else{
                 new Alert(Alert.AlertType.WARNING,
                         "Try Again").show();
@@ -98,6 +99,38 @@ public class CustomerFormController {
             if(isSaved>0){
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Updated").show();
+                clear();
+            }else{
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Try again").show();
+            }
+        }catch (SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR,
+                    e.getMessage()).show();
+        }
+    }
+
+    private void clear(){
+        txtSalary.clear();
+        txtAddress.clear();
+        txtName.clear();
+        txtId.clear();
+    }
+
+    public void deleteOnAction(ActionEvent actionEvent) {
+        int customerId=
+                Integer.parseInt(txtId.getText());
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc","root","1234");
+            String sql ="DELETE FROM customer WHERE id=?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1,customerId);
+            int isDeleted = stm.executeUpdate();
+            if(isDeleted>0){
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Customer Deleted").show();
+                clear();
             }else{
                 new Alert(Alert.AlertType.INFORMATION,
                         "Try again").show();
