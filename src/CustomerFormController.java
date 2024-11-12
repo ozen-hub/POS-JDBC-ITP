@@ -53,11 +53,19 @@ public class CustomerFormController {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/jdbc","root","1234");
             String sql ="SELECT * FROM customer WHERE id=?";
             PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1,customerId);
             ResultSet set = stm.executeQuery();
             if(set.next()){
-                System.out.println(set);
+              /*  System.out.println(set.getInt("id"));
+                System.out.println(set.getString("address"));
+                System.out.println(set.getInt(1));
+                System.out.println(set.getString(2));*/
+                txtName.setText(set.getString(2));
+                txtAddress.setText(set.getString(3));
+                txtSalary.setText(String.valueOf(set.getDouble(4)));
             }else{
-                System.out.println("not found");
+               new Alert(Alert.AlertType.WARNING,"Customer Not Found").show();
+
             }
         }catch (ClassNotFoundException | SQLException e){
             e.printStackTrace();
