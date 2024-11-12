@@ -31,6 +31,10 @@ public class CustomerFormController {
             // create the statement
             PreparedStatement statement =
                     con.prepareStatement(sql);
+            statement.setInt(1, id);
+            statement.setString(2, name);
+            statement.setString(3, address);
+            statement.setDouble(4, salary);
             int isSaved = statement.executeUpdate();
             if(isSaved>0){
                 new Alert(Alert.AlertType.INFORMATION,
