@@ -23,7 +23,6 @@ public class CustomerFormController {
 
     public void initialize(){
         loadAllData();
-
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -31,88 +30,63 @@ public class CustomerFormController {
     }
 
     private void loadAllData() {
-        ObservableList<CustomerTM> tmList =
-                FXCollections.observableArrayList();
+        ObservableList<CustomerTM> tmList = FXCollections.observableArrayList();
         try{
             for (Customer c: new DatabaseCode().findAll()){
-                tmList.add(
-                new CustomerTM(
-                        c.getId(),c.getName(),c.getAddress(),c.getSalary()
-                ));
+                tmList.add(new CustomerTM(c.getId(),c.getName(),c.getAddress(),c.getSalary()));
             }
             tblCustomers.setItems(tmList);
         }catch (ClassNotFoundException | SQLException e){
-            new Alert(Alert.AlertType.ERROR,
-                    e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
         }
     }
 
     public void saveOnAction(ActionEvent actionEvent) {
-        Customer c= new Customer(
-                Integer.parseInt(txtId.getText()),
-                txtName.getText(),
-                txtAddress.getText(),
-                Double.parseDouble(txtSalary.getText())
-        );
+        Customer c= new Customer(Integer.parseInt(txtId.getText()), txtName.getText(), txtAddress.getText(), Double.parseDouble(txtSalary.getText()));
         try{
             boolean isSaved = new DatabaseCode().save(c);
             if(isSaved){
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Customer Saved").show();
+                new Alert(Alert.AlertType.INFORMATION, "Customer Saved").show();
                 clear();
                 loadAllData();
             }else{
-                new Alert(Alert.AlertType.WARNING,
-                        "Try Again").show();
+                new Alert(Alert.AlertType.WARNING, "Try Again").show();
             }
         }catch (ClassNotFoundException | SQLException e){
-            new Alert(Alert.AlertType.ERROR,
-                    e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
     }
 
     public void getCustomerOnAction(ActionEvent actionEvent) {
-        int customerId=
-                Integer.parseInt(txtId.getText());
+        int customerId=Integer.parseInt(txtId.getText());
         try{
-            Customer selectedCustomer =
-                    new DatabaseCode().find(customerId);
+            Customer selectedCustomer =new DatabaseCode().find(customerId);
             if(null!=selectedCustomer){
                 txtName.setText(selectedCustomer.getName());
                 txtAddress.setText(selectedCustomer.getAddress());
                 txtSalary.setText(String.valueOf(selectedCustomer.getSalary()));
             }else{
                new Alert(Alert.AlertType.WARNING,"Customer Not Found").show();
-
             }
         }catch (ClassNotFoundException | SQLException e){
-            new Alert(Alert.AlertType.ERROR,
-                    e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
         }
     }
 
     public void updateOnAction(ActionEvent actionEvent) {
-        Customer c= new Customer(
-                Integer.parseInt(txtId.getText()),
-                txtName.getText(),
-                txtAddress.getText(),
-                Double.parseDouble(txtSalary.getText())
-        );
+        Customer c= new Customer(Integer.parseInt(txtId.getText()), txtName.getText(), txtAddress.getText(), Double.parseDouble(txtSalary.getText()));
         try{
             boolean isUpdated = new DatabaseCode().update(c);
             if(isUpdated){
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Customer Updated").show();
+                new Alert(Alert.AlertType.INFORMATION, "Customer Updated").show();
                 clear();
                 loadAllData();
             }else{
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Try again").show();
+                new Alert(Alert.AlertType.INFORMATION, "Try again").show();
             }
         }catch (SQLException | ClassNotFoundException e){
-            new Alert(Alert.AlertType.ERROR,
-                    e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
@@ -124,24 +98,18 @@ public class CustomerFormController {
     }
 
     public void deleteOnAction(ActionEvent actionEvent) {
-        int customerId=
-                Integer.parseInt(txtId.getText());
+        int customerId=Integer.parseInt(txtId.getText());
         try{
-
-            boolean isDeleted =
-                    new DatabaseCode().delete(customerId);
+            boolean isDeleted =new DatabaseCode().delete(customerId);
             if(isDeleted){
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Customer Deleted").show();
+                new Alert(Alert.AlertType.INFORMATION, "Customer Deleted").show();
                 clear();
                 loadAllData();
             }else{
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Try again").show();
+                new Alert(Alert.AlertType.INFORMATION, "Try again").show();
             }
         }catch (SQLException | ClassNotFoundException e){
-            new Alert(Alert.AlertType.ERROR,
-                    e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 }
