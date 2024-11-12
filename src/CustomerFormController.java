@@ -44,7 +44,8 @@ public class CustomerFormController {
                         "Try Again").show();
             }
         }catch (ClassNotFoundException | SQLException e){
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    e.getMessage()).show();
         }
 
     }
@@ -72,7 +73,8 @@ public class CustomerFormController {
 
             }
         }catch (ClassNotFoundException | SQLException e){
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,
+                    e.getMessage()).show();
         }
     }
 }
