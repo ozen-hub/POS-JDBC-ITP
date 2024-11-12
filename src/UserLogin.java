@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.sql.*;
 
 public class UserLogin {
@@ -9,14 +10,20 @@ public class UserLogin {
                         "jdbc:mysql://localhost:3306/jdbc",
                 "root",
                 "1234");
-        String user="admin";
-        String password="1234";
-        Statement statement = con.createStatement();
+        // SQL INJECTION -> admin' OR '1'='1
+        String user= JOptionPane.showInputDialog("enter username");
+        // password you can type anything
+        String password=JOptionPane.showInputDialog("enter password");
+       /* Statement statement = con.createStatement();
         ResultSet set =
                 statement.
-                        executeQuery("SELECT * FROM user" +
-                " WHERE username='"+user+
-                "' AND password='"+password+"'");
+                        executeQuery("SELECT * FROM user " + "WHERE username='" + user + "' AND password='" + password + "'");*/
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM user WHERE username=? AND password=?"
+        );
+        stm.setObject(1,user);
+        stm.setObject(2,password);
+        ResultSet set = stm.executeQuery();
         if (set.next()){
             System.out.println("Correct");
         }else{
