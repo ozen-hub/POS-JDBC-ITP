@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.*;
 
@@ -22,6 +23,11 @@ public class CustomerFormController {
 
     public void initialize(){
         loadAllData();
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colSalary.setCellValueFactory(new PropertyValueFactory<>("salary"));
     }
 
     private void loadAllData() {
@@ -78,6 +84,7 @@ public class CustomerFormController {
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Saved").show();
                 clear();
+                loadAllData();
             }else{
                 new Alert(Alert.AlertType.WARNING,
                         "Try Again").show();
@@ -138,6 +145,7 @@ public class CustomerFormController {
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Updated").show();
                 clear();
+                loadAllData();
             }else{
                 new Alert(Alert.AlertType.INFORMATION,
                         "Try again").show();
@@ -169,6 +177,7 @@ public class CustomerFormController {
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Deleted").show();
                 clear();
+                loadAllData();
             }else{
                 new Alert(Alert.AlertType.INFORMATION,
                         "Try again").show();
