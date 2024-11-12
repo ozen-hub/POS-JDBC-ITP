@@ -32,10 +32,24 @@ public class DatabaseCode {
         } else {return null;}
     }
 
-    public boolean update(Customer c) {
+    public boolean update(Customer c) throws SQLException, ClassNotFoundException {
+        String sql ="UPDATE customer" +
+                " SET name=?, address=?, salary=? WHERE id=?";
+        PreparedStatement stm = DbConnection.getInstance().
+                getConnection().prepareStatement(sql);
+        stm.setString(1,c.getName());
+        stm.setString(2,c.getAddress());
+        stm.setDouble(3,c.getSalary());
+        stm.setInt(4,c.getId());
+        return stm.executeUpdate()>0;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(int id) throws SQLException, ClassNotFoundException {
+        String sql ="DELETE FROM customer WHERE id=?";
+        PreparedStatement stm = DbConnection.getInstance().
+                getConnection().prepareStatement(sql);
+        stm.setInt(1,id);
+        return stm.executeUpdate()>0;
     }
 
     public List<Customer> findAll() {

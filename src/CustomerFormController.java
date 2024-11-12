@@ -100,22 +100,15 @@ public class CustomerFormController {
     }
 
     public void updateOnAction(ActionEvent actionEvent) {
-        int id=Integer.parseInt(txtId.getText());
-        String name = txtName.getText();
-        String address = txtAddress.getText();
-        double salary =
-                Double.parseDouble(txtSalary.getText());
+        Customer c= new Customer(
+                Integer.parseInt(txtId.getText()),
+                txtName.getText(),
+                txtAddress.getText(),
+                Double.parseDouble(txtSalary.getText())
+        );
         try{
-           String sql ="UPDATE customer" +
-                    " SET name=?, address=?, salary=? WHERE id=?";
-            PreparedStatement stm = DbConnection.getInstance().
-                    getConnection().prepareStatement(sql);
-            stm.setString(1,name);
-            stm.setString(2,address);
-            stm.setDouble(3,salary);
-            stm.setInt(4,id);
-            int isSaved = stm.executeUpdate();
-            if(isSaved>0){
+            boolean isUpdated = new DatabaseCode().update(c);
+            if(isUpdated){
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Updated").show();
                 clear();
@@ -142,12 +135,9 @@ public class CustomerFormController {
                 Integer.parseInt(txtId.getText());
         try{
 
-            String sql ="DELETE FROM customer WHERE id=?";
-            PreparedStatement stm = DbConnection.getInstance().
-                    getConnection().prepareStatement(sql);
-            stm.setInt(1,customerId);
-            int isDeleted = stm.executeUpdate();
-            if(isDeleted>0){
+            boolean isDeleted =
+                    new DatabaseCode().delete(customerId);
+            if(isDeleted){
                 new Alert(Alert.AlertType.INFORMATION,
                         "Customer Deleted").show();
                 clear();
