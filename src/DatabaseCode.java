@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseCode {
@@ -52,6 +53,19 @@ public class DatabaseCode {
         return stm.executeUpdate()>0;
     }
 
-    public List<Customer> findAll() {
+    public List<Customer> findAll() throws SQLException, ClassNotFoundException {
+        String sql="SELECT * FROM customer";
+        PreparedStatement statement =DbConnection.getInstance()
+                        .getConnection().prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery();
+        List<Customer> list = new ArrayList<>();
+        while (resultSet.next()){
+            list.add(new Customer(resultSet.getInt(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getDouble(4))
+            );
+        }
+        return list;
     }
 }

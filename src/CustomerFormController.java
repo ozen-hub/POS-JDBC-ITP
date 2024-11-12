@@ -34,18 +34,11 @@ public class CustomerFormController {
         ObservableList<CustomerTM> tmList =
                 FXCollections.observableArrayList();
         try{
-            String sql="SELECT * FROM customer";
-            PreparedStatement statement =
-                    DbConnection.getInstance()
-                            .getConnection().prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            for (Customer c: new DatabaseCode().findAll()){
                 tmList.add(
-                new CustomerTM(resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getDouble(4))
-                );
+                new CustomerTM(
+                        c.getId(),c.getName(),c.getAddress(),c.getSalary()
+                ));
             }
             tblCustomers.setItems(tmList);
         }catch (ClassNotFoundException | SQLException e){
